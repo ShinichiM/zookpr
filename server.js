@@ -1,9 +1,29 @@
 const express = require('express');
 const { animals } = require('./data/animals.json');
 const app = express();
+const fs = require('fs');
+const path = require('path');
+
+// parse incoming string or array data
+app.use(express.urlencoded({ extended: true }));
+// parse incoming JSON data
+app.use(express.json());
 
 
 const PORT = process.env.PORT || 3001;
+
+function createNewAnimal(body, animalsArray) {
+    const animal = body;
+    animalsArray.push(animal);
+
+    fs.writeFileSync(
+        path.join(__dirname + '/data/animals.json'),
+        JSON.stringify({ animals: animalsArray }, null, 2)
+    );
+
+    console.log({ animals: animalsArray})
+    return body;
+};
 
 const filterByQuery = function (query, animalsArray) {
     let personalityTraitsArray = [];
@@ -53,6 +73,12 @@ app.get('/api/animals/:id', (req, res) => {
         res.send(404);
     }
 })
+
+app.post('/api/animals', (req, res) => {
+    req.body.id = animals.length.toString();
+    const animal = createNewAnimal(req.body, animals);
+    res.json(req.body);
+});
 
 app.listen(PORT, () => {
     console.log(`API Server now on port ${PORT}`);
