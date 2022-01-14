@@ -137,6 +137,15 @@
         "goofy"
       ],
       "id": "13"
+    },
+    {
+      "name": "tur",
+      "species": "jhik",
+      "diet": "herbivore",
+      "personalityTraits": [
+        "anxious"
+      ],
+      "id": "14"
     }
   ]
 }
